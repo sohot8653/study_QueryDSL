@@ -5,6 +5,8 @@ import com.qsl.qsl_tutorial.boundedContext.user.entity.SiteUser;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import static com.qsl.qsl_tutorial.boundedContext.user.entity.QSiteUser.siteUser;
+
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepositoryCustom{
 
@@ -12,8 +14,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
 
     @Override
     public SiteUser getQslUser(Long id) {
-
-        QSiteUser siteUser = QSiteUser.siteUser;
 
         return jpaQueryFactory
                 .selectFrom(siteUser)
