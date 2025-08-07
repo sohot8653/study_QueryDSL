@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class QslTutorialApplicationTests {
@@ -29,9 +29,12 @@ class QslTutorialApplicationTests {
 	}
 
 	@Test
-	void test() {
-	    System.out.println("🔥 테스트 시작됨");
-	    assertTrue(false); // 강제 실패
+	@DisplayName("1번 회원을 Qsl로 가져오기")
+	void t2() {
+		SiteUser u1 = userRepository.getQslUser(1L);
+
+		assertThat(u1.getId()).isEqualTo(1L);
+		assertThat(u1.getUsername()).isEqualTo("user1");
 	}
 
 }
