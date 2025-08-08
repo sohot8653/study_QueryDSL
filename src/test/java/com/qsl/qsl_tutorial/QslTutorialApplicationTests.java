@@ -2,6 +2,7 @@ package com.qsl.qsl_tutorial;
 
 import com.qsl.qsl_tutorial.boundedContext.user.entity.SiteUser;
 import com.qsl.qsl_tutorial.boundedContext.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 @ActiveProfiles("test")
 class QslTutorialApplicationTests {
 
