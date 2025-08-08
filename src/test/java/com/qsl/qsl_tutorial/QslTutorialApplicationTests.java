@@ -7,8 +7,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -81,4 +86,24 @@ class QslTutorialApplicationTests {
 
         assertThat(users2.size()).isEqualTo(1);
     }
+
+	@Test
+	@DisplayName("검색, Page 리턴")
+	void t8() {
+		long totalCount = userRepository.count();
+		int pageSize = 1;
+		int totalPages = (int)Math.ceil(totalCount / (double)pageSize);
+		int page = 1;	// 2페이지
+		String text = "user";
+
+		int itemInAPage= 1;
+		List<Sort.Order> sorts = new ArrayList<>();
+		sorts.add(Sort.Order.asc("id"));
+		Pageable pageable = PageRequest.of(page, itemInAPage, Sort.by(sorts));
+		Page<SiteUser> usersPage = userRepository.searchQsl(text, pageable);
+
+		assertThat(usersPage.getTotalPages()).isEqualTo(totalPages);
+		assertThat(usersPage.getNumber()).isEqualTo(page);
+		assertThat(usersPage.getSize()).isEqualTo(pageSize);
+	}
 }
