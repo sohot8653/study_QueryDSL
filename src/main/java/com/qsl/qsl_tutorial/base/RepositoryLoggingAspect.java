@@ -13,19 +13,19 @@ public class RepositoryLoggingAspect {
 
     // 모든 Spring Data Repository 메소드
     @Around("execution(* org.springframework.data.repository.Repository+.*(..))")
-    public Object logRepoCall(ProceedingJoinPoint pjp) throws Throwable {
+    public Object logQueryCall(ProceedingJoinPoint pjp) throws Throwable {
         long t0 = System.currentTimeMillis();
         String type = pjp.getSignature().getDeclaringTypeName();
         String method = pjp.getSignature().getName();
         Object[] args = pjp.getArgs();
 
-        log.info("[Repo call] {}.{}(args={})", type, method, java.util.Arrays.toString(args));
+        log.info("[QUERY CALL] {}.{}(args={})", type, method, java.util.Arrays.toString(args));
         try {
             Object result = pjp.proceed();
-            log.info("[Repo done] {}.{}() in {}ms", type, method, (System.currentTimeMillis() - t0));
+            log.info("[QUERY DONE] {}.{}() in {}ms", type, method, (System.currentTimeMillis() - t0));
             return result;
         } catch (Throwable ex) {
-            log.warn("[Repo fail] {}.{}() -> {}", type, method, ex.toString());
+            log.warn("[QUERY FAIL] {}.{}() -> {}", type, method, ex.toString());
             throw ex;
         }
     }
