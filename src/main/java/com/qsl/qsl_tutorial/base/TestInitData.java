@@ -14,17 +14,17 @@ import java.util.List;
 //@Profile({"dev", "test"})
 @Profile("test")
 public class TestInitData {
-    @Bean
-    CommandLineRunner init(UserRepository userRepository) {
-        return args -> {
-            SiteUser u1 = SiteUser.builder()
-                            .username("user1")
-                            .password("{noop}1234")
-                            .email("user1@test.com")
-                            .build();
-            SiteUser u2 = new SiteUser(null, "user2", "{noop}1234", "user2@test.com");
-
-            List<SiteUser> siteUsers = userRepository.saveAll(Arrays.asList(u1, u2));
-        };
-    }
+//    @Bean
+//    CommandLineRunner init(UserRepository userRepository) {
+//        return args -> {
+//            SiteUser u1 = SiteUser.builder()
+//                            .username("user1")
+//                            .password("{noop}1234")
+//                            .email("user1@test.com")
+//                            .build();
+//            SiteUser u2 = new SiteUser(null, "user2", "{noop}1234", "user2@test.com");
+//
+//            List<SiteUser> siteUsers = userRepository.saveAll(Arrays.asList(u1, u2));
+//        };
+//    }
 }

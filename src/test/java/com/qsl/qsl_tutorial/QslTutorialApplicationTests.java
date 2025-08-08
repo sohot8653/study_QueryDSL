@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -25,9 +26,6 @@ class QslTutorialApplicationTests {
 	@DisplayName("회원 생성")
 	void t1() {
 		// {noop} : 비밀번호를 암호화하지 않고 그대로 사용
-		/*SiteUser u1 = new SiteUser(null, "user1", "{noop}1234", "user1@test.com");
-		SiteUser u2 = new SiteUser(null, "user2", "{noop}1234", "user2@test.com");*/
-
 		SiteUser u1 = SiteUser.builder()
 						.username("user3")
 						.password("{noop}1234")
@@ -48,4 +46,27 @@ class QslTutorialApplicationTests {
 		assertThat(u1.getUsername()).isEqualTo("user1");
 	}
 
+	@Test
+	@DisplayName("모든 회원 수")
+	void t4() {
+		long count = userRepository.getQslCount();
+
+		assertThat(count).isGreaterThan(0);
+	}
+
+	@Test
+	@DisplayName("가장 오래된 회원")
+	void t5() {
+		SiteUser u1 = userRepository.getQslUserOrderByIdAscOne();
+
+		assertThat(u1.getId()).isEqualTo(1L);
+	}
+
+	@Test
+	@DisplayName("가장 오래된 회원")
+	void t6() {
+		List<SiteUser> userList = userRepository.getQslUserOrderByIdAsc();
+
+		assertThat(userList.get(0).getId()).isEqualTo(1L);
+	}
 }
