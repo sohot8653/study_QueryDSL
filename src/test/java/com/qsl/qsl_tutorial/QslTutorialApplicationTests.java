@@ -69,4 +69,16 @@ class QslTutorialApplicationTests {
 
 		assertThat(userList.get(0).getId()).isEqualTo(1L);
 	}
+
+    @Test
+    @DisplayName("검색, List 리턴, 검색 대상 : username, email")
+    void t7() {
+        List<SiteUser> users = userRepository.searchQsl("user1");
+
+        assertThat(users.size()).isEqualTo(1);
+
+        List<SiteUser> users2 = userRepository.searchQsl("user4@test.com");
+
+        assertThat(users2.size()).isEqualTo(1);
+    }
 }
