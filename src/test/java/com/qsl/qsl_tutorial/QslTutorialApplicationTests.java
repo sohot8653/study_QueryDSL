@@ -6,12 +6,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class QslTutorialApplicationTests {
 
 	@Autowired
@@ -25,11 +27,11 @@ class QslTutorialApplicationTests {
 		SiteUser u2 = new SiteUser(null, "user2", "{noop}1234", "user2@test.com");*/
 
 		SiteUser u1 = SiteUser.builder()
-						.username("user1")
+						.username("user3")
 						.password("{noop}1234")
-						.email("user1@test.com")
+						.email("user3@test.com")
 						.build();
-		SiteUser u2 = new SiteUser(null, "user2", "{noop}1234", "user2@test.com");
+		SiteUser u2 = new SiteUser(null, "user4", "{noop}1234", "user4@test.com");
 
 		userRepository.saveAll(Arrays.asList(u1, u2));
 
