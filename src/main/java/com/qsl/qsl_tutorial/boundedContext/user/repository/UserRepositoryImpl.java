@@ -1,9 +1,16 @@
 package com.qsl.qsl_tutorial.boundedContext.user.repository;
 
+import com.qsl.qsl_tutorial.boundedContext.user.entity.QSiteUser;
 import com.qsl.qsl_tutorial.boundedContext.user.entity.SiteUser;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.qsl.qsl_tutorial.boundedContext.user.entity.QSiteUser.siteUser;
@@ -24,11 +31,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
 
     @Override
     public long getQslCount() {
-        return jpaQueryFactory
-                .select(siteUser.count())
-                .from(siteUser)
-                .fetchOne();
-
+        Long total = jpaQueryFactory
+                    .select(siteUser.id.count())
+                    .from(siteUser)
+                    .fetchOne();
+        return total != null ? total : 0L;
     }
 
     @Override
@@ -57,5 +64,31 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                         .or(siteUser.email.contains(text))
                 )
                 .fetch();
+    }
+
+    @Override
+    public Page<SiteUser> searchQsl(String text, Pageable pageable) {
+        BooleanExpression predicate = StringUtils.hasText(text)
+                ? siteUser.username.containsIgnoreCase(text)
+                    .or(siteUser.email.containsIgnoreCase(text))
+                : null; // null이면 where에서 무시됨
+
+        // 데이터 목록 (정렬 고정: id ASC)
+        List<SiteUser> content = jpaQueryFactory
+                .selectFrom(siteUser)
+                .where(predicate)
+                .orderBy(siteUser.id.asc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        // 전체 개수
+        Long total = jpaQueryFactory
+                .select(siteUser.id.count())
+                .from(siteUser)
+                .where(predicate)
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total != null ? total : 0L);
     }
 }
