@@ -43,6 +43,12 @@ class QslTutorialApplicationTests {
 				.email("user4@test.com")
 				.build();
 
+		u1.addInterestKeywordContent("야구");
+		u1.addInterestKeywordContent("농구");
+
+		u2.addInterestKeywordContent("등산");
+		u2.addInterestKeywordContent("캠핑");
+
 		userRepository.saveAll(Arrays.asList(u1, u2));
 
 	}
@@ -126,5 +132,23 @@ class QslTutorialApplicationTests {
 		List<SiteUser> users = userRepository.getQslUserByInterestKeyword("런닝");
 		SiteUser u = users.get(0);
 		assertThat(u.getUsername()).isEqualTo("user2");
+	}
+
+	@Test
+	@DisplayName("no QueryDSL, 런닝에 관심이 있는 회원들 검색")
+	void t12() {
+		List<SiteUser> users = userRepository.findByInterestKeywords_content("런닝");
+		SiteUser u = users.get(0);
+		assertThat(u.getUsername()).isEqualTo("user2");
+	}
+
+	@Test
+	@DisplayName("u2=아이돌, u1=팬 u1은 u2의 팔로워이다.")
+	void t13() {
+		SiteUser u1 =userRepository.getQslUser(1L);
+		SiteUser u2 =userRepository.getQslUser(2L);
+
+		u2.addFollower(u1);
+		userRepository.save(u2);
 	}
 }
