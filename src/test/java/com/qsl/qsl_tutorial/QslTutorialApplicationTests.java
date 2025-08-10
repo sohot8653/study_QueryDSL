@@ -36,7 +36,12 @@ class QslTutorialApplicationTests {
 						.password("{noop}1234")
 						.email("user3@test.com")
 						.build();
-		SiteUser u2 = new SiteUser(null, "user4", "{noop}1234", "user4@test.com");
+
+		SiteUser u2 = SiteUser.builder()
+				.username("user4")
+				.password("{noop}1234")
+				.email("user4@test.com")
+				.build();
 
 		userRepository.saveAll(Arrays.asList(u1, u2));
 
