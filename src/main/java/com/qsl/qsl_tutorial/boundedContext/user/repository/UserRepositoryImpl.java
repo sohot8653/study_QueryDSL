@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.qsl.qsl_tutorial.boundedContext.user.entity.QSiteUser.siteUser;
@@ -100,5 +101,10 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                 .fetchOne();
 
         return new PageImpl<>(users, pageable, usersCountQuery.fetchOne());
+    }
+
+    @Override
+    public List<SiteUser> getQslUserByInterestKeyword(String keyword) {
+        return null;
     }
 }

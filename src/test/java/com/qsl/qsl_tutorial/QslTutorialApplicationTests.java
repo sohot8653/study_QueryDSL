@@ -117,5 +117,14 @@ class QslTutorialApplicationTests {
 	void t10() {
 		SiteUser u2 = userRepository.getQslUser(2L);
 		u2.addInterestKeywordContent("테니스");
+		userRepository.save(u2);
+	}
+
+	@Test
+	@DisplayName("런닝에 관심이 있는 회원들 검색")
+	void t11() {
+		List<SiteUser> users = userRepository.getQslUserByInterestKeyword("런닝");
+		SiteUser u = users.get(0);
+		assertThat(u.getUsername()).isEqualTo("user2");
 	}
 }
