@@ -106,4 +106,11 @@ class QslTutorialApplicationTests {
 		assertThat(usersPage.getNumber()).isEqualTo(page);
 		assertThat(usersPage.getSize()).isEqualTo(pageSize);
 	}
+
+	@Test
+	@DisplayName("회원에게 관심사를 등록할 수 있다.")
+	void t10() {
+		SiteUser u2 = userRepository.getQslUser(2L);
+		u2.addInterestKeywordContent("테니스");
+	}
 }

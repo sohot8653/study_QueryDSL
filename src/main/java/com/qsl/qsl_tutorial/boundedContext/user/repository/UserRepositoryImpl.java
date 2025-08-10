@@ -1,16 +1,16 @@
 package com.qsl.qsl_tutorial.boundedContext.user.repository;
 
-import com.qsl.qsl_tutorial.boundedContext.user.entity.QSiteUser;
 import com.qsl.qsl_tutorial.boundedContext.user.entity.SiteUser;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.qsl.qsl_tutorial.boundedContext.user.entity.QSiteUser.siteUser;
@@ -73,14 +73,24 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                     .or(siteUser.email.containsIgnoreCase(text))
                 : null; // null이면 where에서 무시됨
 
-        // 데이터 목록 (정렬 고정: id ASC)
-        List<SiteUser> content = jpaQueryFactory
+        // 데이터 목록 (정렬 고정: id)
+        JPAQuery<SiteUser> usersQuery = jpaQueryFactory
                 .selectFrom(siteUser)
                 .where(predicate)
-                .orderBy(siteUser.id.asc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+                .limit(pageable.getPageSize());
+
+        for (Sort.Order o : pageable.getSort()) {
+            PathBuilder pathBuilder = new PathBuilder(siteUser.getType(), siteUser.getMetadata());
+            usersQuery.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC, pathBuilder.get(o.getProperty())));
+        }
+
+        List<SiteUser> users = usersQuery.fetch();
+
+        JPAQuery<Long> usersCountQuery = jpaQueryFactory
+                .select(siteUser.count())
+                .from(siteUser)
+                .where(predicate);
 
         // 전체 개수
         Long total = jpaQueryFactory
@@ -89,6 +99,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                 .where(predicate)
                 .fetchOne();
 
-        return new PageImpl<>(content, pageable, total != null ? total : 0L);
+        return new PageImpl<>(users, pageable, usersCountQuery.fetchOne());
     }
 }
