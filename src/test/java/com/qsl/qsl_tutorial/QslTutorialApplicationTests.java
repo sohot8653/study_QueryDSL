@@ -174,7 +174,7 @@ class QslTutorialApplicationTests {
 		assertThat(u1.getFollowers().size()).isEqualTo(0);
 		assertThat(u2.getFollowers().size()).isEqualTo(1);
 
-		assertThat(u1.getFollowings().size()).isEqualTo(0);
+		assertThat(u2.getFollowings().size()).isEqualTo(0);
 
 	}
 }

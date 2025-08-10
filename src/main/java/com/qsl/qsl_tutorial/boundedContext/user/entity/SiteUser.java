@@ -1,10 +1,9 @@
 package com.qsl.qsl_tutorial.boundedContext.user.entity;
 
-import com.qsl.qsl_tutorial.boundedContext.interestKeyword.InterestKeyword;
+import com.qsl.qsl_tutorial.boundedContext.interestKeyword.entity.InterestKeyword;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,15 +27,19 @@ public class SiteUser {
     private String email;
 
     @Builder.Default
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<InterestKeyword> interestKeywords = new HashSet<>();
 
     @Builder.Default
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<SiteUser> followers = new HashSet<>();
 
+    @Builder.Default
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<SiteUser> followings = new HashSet<>();
+
     public void addInterestKeywordContent(String keywordContent) {
-        interestKeywords.add(new InterestKeyword(keywordContent));
+        interestKeywords.add(new InterestKeyword(this, keywordContent));
     }
 
     public void addFollower(SiteUser follower) {
@@ -49,9 +52,6 @@ public class SiteUser {
         if(this.getId() == following.getId()) return;
 
         following.getFollowers().add(this);
-    }
-
-    public Set<Object> getFollowings() {
-        return new HashSet<>();
+        getFollowings().add(following);
     }
 }

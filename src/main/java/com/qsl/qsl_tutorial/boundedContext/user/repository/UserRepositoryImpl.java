@@ -1,7 +1,5 @@
 package com.qsl.qsl_tutorial.boundedContext.user.repository;
 
-import com.qsl.qsl_tutorial.boundedContext.interestKeyword.QInterestKeyword;
-import com.qsl.qsl_tutorial.boundedContext.user.entity.QSiteUser;
 import com.qsl.qsl_tutorial.boundedContext.user.entity.SiteUser;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -15,7 +13,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.qsl.qsl_tutorial.boundedContext.interestKeyword.QInterestKeyword.interestKeyword;
+import static com.qsl.qsl_tutorial.boundedContext.interestKeyword.entity.QInterestKeyword.interestKeyword;
 import static com.qsl.qsl_tutorial.boundedContext.user.entity.QSiteUser.siteUser;
 
 @RequiredArgsConstructor
@@ -109,7 +107,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     public List<SiteUser> getQslUserByInterestKeyword(String keyword) {
         return jpaQueryFactory.selectFrom(siteUser)
                 .innerJoin(siteUser.interestKeywords, interestKeyword)
-                .where(interestKeyword.keywordContent.eq(keyword))
+                .where(interestKeyword.content.eq(keyword))
                 .fetch();
     }
 }
