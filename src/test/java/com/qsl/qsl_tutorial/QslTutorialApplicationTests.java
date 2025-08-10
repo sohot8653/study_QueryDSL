@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
@@ -160,5 +161,20 @@ class QslTutorialApplicationTests {
 		SiteUser u1 = userRepository.getQslUser(1L);
 		u1.follow(u1);
 		assertThat(u1.getFollowers().size()).isEqualTo(0);
+	}
+
+	@Test
+	@DisplayName("특정회원의 follower들과 following들을 모두 알 수 있어야 한다.")
+	@Rollback(value = false)
+	void t15() {
+		SiteUser u1 = userRepository.getQslUser(1L);
+		SiteUser u2 = userRepository.getQslUser(2L);
+
+		u1.follow(u2);
+		assertThat(u1.getFollowers().size()).isEqualTo(0);
+		assertThat(u2.getFollowers().size()).isEqualTo(1);
+
+		assertThat(u1.getFollowings().size()).isEqualTo(0);
+
 	}
 }

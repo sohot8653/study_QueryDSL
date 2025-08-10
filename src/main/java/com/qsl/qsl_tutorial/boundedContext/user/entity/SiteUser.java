@@ -4,6 +4,7 @@ import com.qsl.qsl_tutorial.boundedContext.interestKeyword.InterestKeyword;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,5 +49,9 @@ public class SiteUser {
         if(this.getId() == following.getId()) return;
 
         following.getFollowers().add(this);
+    }
+
+    public Set<Object> getFollowings() {
+        return new HashSet<>();
     }
 }
